@@ -20,12 +20,15 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '1!pc$r*)+msm%ve^h(jwrf$21r63x&yi0-hh=+oo5-t_**91_q'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'https://country-app-backend.herokuapp.com',
+    'country-app-backend.herokuapp.com'
+]
 
 
 # Application definition
@@ -78,10 +81,10 @@ WSGI_APPLICATION = 'country_app_project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'country_db',
-        'USER': 'postgres',
-        'PASSWORD': '',
-        'HOST':'localhost',
+        'NAME': os.getenv('DB_NAME',default='country_db'),
+        'USER': os.getenv('DB_USER',default='postgres'),
+        'PASSWORD': os.getenv('DB_PASSWORD', default=''),
+        'HOST': os.getenv('DB_HOST', default='localhost'),
         'PORT': '5432',
     }
 }
