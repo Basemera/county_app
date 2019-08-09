@@ -26,7 +26,8 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'https://country-app-backend.herokuapp.com'
+    'https://country-app-backend.herokuapp.com',
+    'country-app-backend.herokuapp.com'
 ]
 
 
