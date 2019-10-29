@@ -27,7 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     'https://country-app-backend.herokuapp.com',
-    'country-app-backend.herokuapp.com'
+    'country-app-backend.herokuapp.com',
+    'localhost'
 ]
 
 
