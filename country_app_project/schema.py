@@ -8,7 +8,8 @@ from country_list.schema.mutations.country import Mutation as CreateCountryMutat
 class Query(CountryQuery, CityQuery, SubCountryQuery, graphene.ObjectType):
     pass
 
-class Mutation(CreateCountryMutation, graphene.ObjectType):
-    pass
+class Mutation(CreateCountryMutation, RegisterUser, graphene.ObjectType):
+    class Mutation(CreateCountryMutation, CreateCityMutation, graphene.ObjectType):
+        pass
 
 schema = graphene.Schema(query=Query, mutation=Mutation)
