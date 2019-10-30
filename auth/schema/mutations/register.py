@@ -1,8 +1,9 @@
 import graphene
+import re
 from graphene_django import DjangoObjectType
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
-from django.core.validators import EmailValidator, MinValueValidator
+from django.core.validators import EmailValidator, MinValueValidator, RegexValidator
 from django.contrib.auth.validators import UnicodeUsernameValidator
 
 class RegisterUser(graphene.Mutation):
@@ -37,8 +38,15 @@ class RegisterUser(graphene.Mutation):
 
     '''Validate a username and make sure it contains only alphanumeric characters and special characters'''
     def validate_username(username):
-        # use a regex
-        return
+        username_validator = RegexValidator(
+            r"(^[~0-9A-Za-z]*)",
+            "Username must contain only alphanumeric characters and special characters",
+            None,
+            re.IGNORECASE)
+        valid_username = username_validator.__call__(username)
+        if valid_username == True:
+            raise ValidationError()
+        return username
     
     def validate_name(name):
         if name.isalnum() == False:
@@ -48,11 +56,12 @@ class RegisterUser(graphene.Mutation):
     def mutate(self, info, **kwargs):
         raw_first_name = kwargs.get('first_name')
         raw_last_name = kwargs.get('last_name')
-        raw_username = kwargs.get('username')
+        username = kwargs.get('username')
         raw_email = kwargs.get('email')
         raw_password = kwargs.get('password')
         valid_password = RegisterUser.validate_password(raw_password)
         email = RegisterUser.validate_email(raw_email)
+        # username = RegisterUser.validate_username(raw_username)
         first_name = RegisterUser.validate_name(raw_first_name)
         last_name = RegisterUser.validate_name(raw_last_name)
         User = get_user_model()
