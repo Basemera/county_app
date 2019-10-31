@@ -7,6 +7,7 @@ class CityType(DjangoObjectType):
     class Meta:
         model = City
     
+    
 class Query(graphene.ObjectType):
     cities = graphene.List(CityType)
 

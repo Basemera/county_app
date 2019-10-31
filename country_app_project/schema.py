@@ -6,7 +6,6 @@ from country_list.schema.mutations.country import Mutation as CreateCountryMutat
 from auth.schema.mutations.register import Mutation as RegisterUser
 from country_list.schema.mutations.city import Mutation as CreateCityMutation
 
-
 class Query(CountryQuery, CityQuery, SubCountryQuery, graphene.ObjectType):
     pass
 
