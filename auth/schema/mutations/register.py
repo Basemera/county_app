@@ -30,8 +30,7 @@ class RegisterUser(graphene.Mutation):
         return password
 
     def validate_email(email):
-        email_validator = EmailValidator()
-        email_valid = email_validator.__call__(email)
+        email_validator = EmailValidator(email)
         if email_valid == False:
             raise ValidationError()
         return email
@@ -43,7 +42,7 @@ class RegisterUser(graphene.Mutation):
             "Username must contain only alphanumeric characters and special characters",
             None,
             re.IGNORECASE)
-        valid_username = username_validator.__call__(username)
+        valid_username = username_validator(username)
         if valid_username == True:
             raise ValidationError()
         return username
