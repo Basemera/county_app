@@ -1,9 +1,11 @@
 import graphene
+import re
 from graphene_django import DjangoObjectType
 from django.contrib.auth import get_user_model
-from django.core.exceptions import ValidationError
-from django.core.validators import EmailValidator, MinValueValidator
-from django.contrib.auth.validators import UnicodeUsernameValidator
+# from county_app.utils.validations
+from utils.validations import validate_email, validate_name, validate_password, validate_username
+# from ....utils.validations import validate_username, validate_email, validate_name, validate_password
+# from ....utils.validations import validations
 
 class RegisterUser(graphene.Mutation):
     user_id = graphene.Int()
@@ -20,28 +22,17 @@ class RegisterUser(graphene.Mutation):
         email = graphene.String()
         password = graphene.String()
 
-    def validate_password(password):
-        password_length = MinValueValidator(8)
-        password_valid = password_length.compare(8, len(password))
-        if password_valid == False:
-            raise ValidationError("Password must be at least 8 characters")
-        return password
-
-    def validate_email(email):
-        email_validator = EmailValidator()
-        email_valid = email_validator.__call__(email)
-        if email_valid == False:
-            raise ValidationError()
-        return email
-        
     def mutate(self, info, **kwargs):
-        first_name = kwargs.get('first_name')
-        last_name = kwargs.get('last_name')
+        raw_first_name = kwargs.get('first_name')
+        raw_last_name = kwargs.get('last_name')
         username = kwargs.get('username')
-        email = kwargs.get('email')
+        raw_email = kwargs.get('email')
         raw_password = kwargs.get('password')
-        valid_password = RegisterUser.validate_password(raw_password)
-        email = RegisterUser.validate_email(email)
+        valid_password = validate_password(raw_password)
+        email = validate_email(raw_email)
+        # username = validations.validate_username(raw_username)
+        first_name = validate_name(raw_first_name)
+        last_name = validations.validate_name(raw_last_name)
         User = get_user_model()
         user = User(
             username=username,
